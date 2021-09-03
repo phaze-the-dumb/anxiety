@@ -106,6 +106,7 @@ extern "C" void load() {
 
     QuestUI::Init();
     QuestUI::Register::RegisterModSettingsViewController(modInfo, DidActivate);
+    QuestUI::Register::RegisterMainMenuModSettingsViewController(modInfo, DidActivate);
     getLogger().info("Successfully installed Settings UI!");
 
     getLogger().info("Installing hooks...");
