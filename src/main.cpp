@@ -16,6 +16,10 @@
 #include "GlobalNamespace/NoteController.hpp"
 #include "GlobalNamespace/NoteCutInfo.hpp"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctime>
+
 using namespace QuestUI;
 using namespace UnityEngine;
 using namespace GlobalNamespace;
@@ -61,6 +65,13 @@ MAKE_HOOK_MATCH(ScoreController_HandleNoteWasCut, &ScoreController::HandleNoteWa
             firstNote = false;
             CRASH_UNLESS(false);
         }
+
+        if(getModConfig().Active.GetValue() && getModConfig().RanNote.GetValue()){
+            srand((unsigned) time(0));
+            if(1 + (rand() % 6) == 1){
+                CRASH_UNLESS(false);
+            }
+        }
     };
 }
 
@@ -73,6 +84,13 @@ MAKE_HOOK_MATCH(ScoreController_HandleNoteWasMissed, &ScoreController::HandleNot
     if(getModConfig().Active.GetValue() && firstNote){
         firstNote = false;
         CRASH_UNLESS(false);
+    }
+
+    if(getModConfig().Active.GetValue() && getModConfig().RanNote.GetValue()){
+        srand((unsigned) time(0));
+        if(1 + (rand() % 6) == 1){
+            CRASH_UNLESS(false);
+        }
     }
 }
 
@@ -93,6 +111,11 @@ void DidActivate(HMUI::ViewController* self, bool firstActivation, bool addedToH
         BeatSaberUI::CreateToggle(container->get_transform(), "Active", getModConfig().Active.GetValue(),
             [](bool value) { 
                 getModConfig().Active.SetValue(value);
+            });
+
+        BeatSaberUI::CreateToggle(container->get_transform(), "Crash If you miss a random note?", getModConfig().RanNote.GetValue(),
+            [](bool value) { 
+                getModConfig().RanNote.SetValue(value);
             });
     }
 }
